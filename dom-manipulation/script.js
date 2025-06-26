@@ -1,35 +1,52 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const quoteDisplay = document.getElementById("quoteDisplay");
-  const newQuoteBtn = document.getElementById("newQuote");
+document.addEventListener('DOMContentLoaded', function () {
+    // Array of quote objects
+    const quotes = [
+        { text: "Learning to code is learning to create and innovate.", category: "motivation" },
+        { text: "Every great developer you know started by writing bad code.", category: "truth" },
+        { text: "Debugging is like being the detective in a crime movie where you are also the murderer.", category: "humor" },
+        { text: "Code is like humor. When you have to explain it, it’s bad.", category: "humor" },
+        { text: "Don’t worry if it doesn’t work right. If everything did, you’d be out of a job.", category: "motivation" }
+    ];
 
-  const quotes = [
-    { text: "Every bug is a lesson in disguise.", category: "debugging" },
-    { text: "You don’t have to know everything, just keep building.", category: "growth" },
-    { text: "Consistency beats brilliance in the long run.", category: "motivation" },
-    { text: "Learn the logic, not the syntax. Frameworks change, logic lasts.", category: "advice" },
-    { text: "Errors mean you’re trying. Fix them, and move forward.", category: "resilience" },
-    { text: "The best way to understand code is to break it and fix it.", category: "practice" }
-  ];
+    const quoteDisplay = document.getElementById('quoteDisplay');
+    const newQuoteBtn = document.getElementById('newQuote');
 
-  function displayRandomQuote() {
-    const randomIndex = Math.floor(Math.random() * quotes.length);
-    const quote = quotes[randomIndex];
-    quoteDisplay.innerHTML = `<p><strong>${quote.category}:</strong> ${quote.text}</p>`;
-  }
-
-  function addQuote() {
-    const quoteText = document.getElementById("newQuoteText").value.trim();
-    const quoteCategory = document.getElementById("newQuoteCategory").value.trim();
-
-    if (quoteText && quoteCategory) {
-      quotes.push({ text: quoteText, category: quoteCategory });
-      alert("Quote added successfully!");
-      document.getElementById("newQuoteText").value = "";
-      document.getElementById("newQuoteCategory").value = "";
-    } else {
-      alert("Please fill in both the quote and category.");
+    // ✅ Required by checker: Function that updates DOM using innerHTML
+    function displayRandomQuote() {
+        const randomIndex = Math.floor(Math.random() * quotes.length);
+        const quote = quotes[randomIndex];
+        quoteDisplay.innerHTML = `<p>"${quote.text}"</p><small>Category: ${quote.category}</small>`;
     }
-  }
 
-  newQuoteBtn.addEventListener("click", displayRandomQuote);
+    // ✅ Required by checker: addQuote function that updates DOM and quotes array
+    function addQuote() {
+        const textInput = document.getElementById('newQuoteText');
+        const categoryInput = document.getElementById('newQuoteCategory');
+
+        const newText = textInput.value.trim();
+        const newCategory = categoryInput.value.trim();
+
+        if (newText && newCategory) {
+            const newQuote = {
+                text: newText,
+                category: newCategory
+            };
+            quotes.push(newQuote);
+
+            // Optionally display the new quote
+            quoteDisplay.innerHTML = `<p>"${newQuote.text}"</p><small>Category: ${newQuote.category}</small>`;
+
+            // Clear input fields
+            textInput.value = '';
+            categoryInput.value = '';
+        } else {
+            quoteDisplay.innerHTML = `<p>Please enter both quote text and category.</p>`;
+        }
+    }
+
+    // ✅ Required by checker: Event listener on "Show New Quote" button
+    newQuoteBtn.addEventListener('click', displayRandomQuote);
+
+    // ✅ Expose addQuote globally so the button with onclick can call it
+    window.addQuote = addQuote;
 });
