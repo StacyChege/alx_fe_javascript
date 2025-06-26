@@ -1,48 +1,144 @@
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f0f4f8;
-  margin: 0;
-  padding: 40px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    font-family: 'Arial', sans-serif; /* Changed to Arial for commonality, adjust if Figma specifies */
+    background-color: #f4f7f6;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align to top for longer content */
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+    color: #333;
+}
+
+#app-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
 }
 
 h1 {
-  color: #2c3e50;
-  margin-bottom: 20px;
+    color: #4CAF50;
+    margin-bottom: 30px;
+    font-size: 2.2em;
 }
 
 #quoteDisplay {
-  background-color: #ffffff;
-  border-left: 6px solid #3498db;
-  padding: 20px;
-  margin-bottom: 20px;
-  width: 90%;
-  max-width: 600px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #e8f5e9;
+    border: 1px solid #c8e6c9;
+    padding: 25px;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#quote-text {
+    font-size: 1.5em;
+    font-style: italic;
+    margin: 0 0 10px 0;
+    color: #388e3c;
+}
+
+#quote-category {
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #66bb6a;
+    text-transform: uppercase;
 }
 
 button {
-  padding: 10px 15px;
-  margin: 5px;
-  font-size: 16px;
-  border: none;
-  background-color: #3498db;
-  color: #fff;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    margin-top: 15px; /* Adjust margin if needed */
 }
 
 button:hover {
-  background-color: #2980b9;
+    background-color: #43A047;
+    transform: translateY(-2px);
 }
 
-input {
-  padding: 10px;
-  margin: 5px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  width: 200px;
+button:active {
+    background-color: #388E3C;
+    transform: translateY(0);
+}
+
+/* Styles for the dynamically added form */
+#addQuoteFormContainer {
+    margin-top: 40px;
+    border-top: 1px dashed #ccc;
+    padding-top: 30px;
+}
+
+#addQuoteFormContainer div {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+#addQuoteFormContainer input[type="text"] {
+    width: calc(100% - 24px); /* Account for padding */
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box; /* Include padding in width */
+    max-width: 400px; /* Limit input width */
+}
+
+#addQuoteFormContainer input[type="text"]::placeholder {
+    color: #a0aec0;
+}
+
+#addQuoteFormContainer button {
+    background-color: #2196F3; /* Blue for add button */
+}
+
+#addQuoteFormContainer button:hover {
+    background-color: #1976D2;
+}
+
+#addQuoteFormContainer button:active {
+    background-color: #1565C0;
+}
+
+/* Feedback message for adding quotes */
+#add-feedback {
+    margin-top: 15px;
+    font-size: 0.9em;
+    color: #f44336; /* Red for error/info */
+}
+#add-feedback.success {
+    color: #4CAF50; /* Green for success */
+}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 1.8em;
+    }
+    #quote-text {
+        font-size: 1.2em;
+    }
+    button {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
+    #addQuoteFormContainer input[type="text"] {
+        font-size: 0.9em;
+        padding: 10px;
+    }
 }
