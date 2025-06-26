@@ -1,25 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Quote Generator</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Quote Generator</title>
 </head>
 <body>
-    <div id="app-container">
-        <h1>Dynamic Quote Generator</h1>
-        <div id="quoteDisplay">
-            <!-- Quotes will be displayed here -->
-            <p id="quote-text"></p>
-            <p id="quote-category"></p>
-        </div>
-        <button id="newQuote">Show New Quote</button>
+  <h1>Dynamic Quote Generator</h1>
+  
+  <div id="quoteDisplay"></div>
 
-        <div id="addQuoteFormContainer">
-            <!-- The quote addition form will be dynamically generated here by JavaScript -->
-        </div>
-    </div>
-    <script src="script.js"></script>
+  <button id="newQuote">Show New Quote</button>
+
+  <div>
+    <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
+    <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
+    <button onclick="addQuote()">Add Quote</button>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
