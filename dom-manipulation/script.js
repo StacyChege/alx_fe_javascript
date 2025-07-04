@@ -1,3 +1,11 @@
+// Set up the full HTML layout dynamically using innerHTML
+document.body.innerHTML = `
+  <h1>Dynamic Quote Generator</h1>
+  <div id="quoteDisplay"></div>
+  <button id="newQuote">Show New Quote</button>
+  <div id="formContainer"></div>
+`;
+
 // Array of quotes with categories
 let quotes = [
   { text: "Believe you can and you're halfway there.", category: "Motivation" },
@@ -5,7 +13,7 @@ let quotes = [
   { text: "The best way to predict the future is to create it.", category: "Inspiration" }
 ];
 
-// Display a random quote
+// Function to display a random quote
 function displayRandomQuote() {
   const randomIndex = Math.floor(Math.random() * quotes.length);
   const quote = quotes[randomIndex];
@@ -16,10 +24,7 @@ function displayRandomQuote() {
   `;
 }
 
-// Update the event listener to use the new name
-document.getElementById("newQuote").addEventListener("click", displayRandomQuote);
-
-// Form to add new quote
+// Function to create the form dynamically
 function createAddQuoteForm() {
   document.getElementById("formContainer").innerHTML = `
     <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
@@ -28,7 +33,7 @@ function createAddQuoteForm() {
   `;
 }
 
-// Add new quote to array and display confirmation
+// Function to add new quotes to the array and update UI
 function addQuote() {
   const text = document.getElementById("newQuoteText").value.trim();
   const category = document.getElementById("newQuoteCategory").value.trim();
@@ -43,5 +48,6 @@ function addQuote() {
   }
 }
 
-// Create the form on page load
+// Set up event listener and show the form
+document.getElementById("newQuote").addEventListener("click", displayRandomQuote);
 createAddQuoteForm();
