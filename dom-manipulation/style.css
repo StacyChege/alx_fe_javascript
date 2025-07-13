@@ -1,0 +1,177 @@
+/* General Body Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    box-sizing: border-box;
+    line-height: 1.6;
+}
+
+/* Main Heading */
+h1 {
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    text-align: center;
+    border-bottom: 3px solid #3498db;
+    padding-bottom: 10px;
+}
+
+/* Filter Container */
+.filter-container {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1em;
+    color: #555;
+}
+
+.filter-container select {
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+    background-color: white;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.filter-container select:hover,
+.filter-container select:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+/* Quote Display Area */
+#quoteDisplay {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 30px;
+    margin-bottom: 25px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 100%;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+#quoteDisplay:hover {
+    transform: translateY(-5px);
+}
+
+/* Quote Text */
+.quote-text {
+    font-size: 1.6em;
+    font-weight: 600;
+    color: #4a4a4a;
+    margin: 0 0 10px 0;
+    line-height: 1.4;
+}
+
+/* Quote Category */
+.quote-category {
+    font-size: 1em;
+    color: #777;
+    font-style: italic;
+}
+
+/* No quote message */
+#quoteDisplay p:first-child[style*="no quotes available"] {
+    color: #d9534f; /* Red for error/info messages */
+    font-style: normal;
+}
+
+/* Buttons Container */
+.buttons-container {
+    display: flex;
+    gap: 15px; /* Space between buttons */
+    margin-bottom: 30px;
+}
+
+/* General Button Styles */
+button {
+    background-color: #5cb85c; /* Green for main actions */
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    background-color: #4cae4c;
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* Export Button Specific Style */
+#exportQuotes {
+    background-color: #f0ad4e; /* Orange for export */
+}
+
+#exportQuotes:hover {
+    background-color: #ec971f;
+}
+
+/* Add Quote Form Container */
+.add-quote-form-container {
+    background-color: #e9ecef;
+    border-radius: 10px;
+    padding: 25px;
+    margin-top: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    max-width: 500px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Form Input Fields */
+.form-input {
+    width: calc(100% - 24px); /* Account for padding and border */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.form-input::placeholder {
+    color: #888;
+}
+
+.form-input:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+/* Add Button in Form */
+.add-button {
+    background-color: #3498db; /* Blue for add */
+}
+
+.add-button:hover {
+    background-color: #2980b9;
+}

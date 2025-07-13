@@ -1,17 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dynamic Quote Generator</title>
-  </head>
-  <body>
+    <link rel="stylesheet" href="new-style.css" />
+</head>
+<body>
     <h1>Dynamic Quote Generator</h1>
+
+    <div class="filter-container">
+        <label for="categoryFilter">Filter by Category:</label>
+        <select id="categoryFilter">
+            <option value="all">All Categories</option>
+            </select>
+    </div>
+
     <div id="quoteDisplay"></div>
-    <button id="newQuote">Show New Quote</button>
+
+    <div class="buttons-container">
+        <button id="newQuote">Show New Quote</button>
+        <button id="exportQuotes">Export Quotes</button>
+    </div>
 
     <div id="formContainer"></div>
 
     <script src="script.js"></script>
-  </body>
+</body>
 </html>

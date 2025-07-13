@@ -1,5 +1,5 @@
-// Initial quote array
-const quotes = [
+// Initial quote array - This will be overridden by localStorage or fetched quotes
+let quotes = [
     {
         text: "The best way to predict the future is to create it.",
         category: "Innovation",
@@ -25,48 +25,145 @@ const quotes = [
 // DOM elements
 const quoteDisplay = document.getElementById("quoteDisplay");
 const newQuoteBtn = document.getElementById("newQuote");
+const exportQuotesBtn = document.getElementById("exportQuotes"); // New export button
+const categoryFilter = document.getElementById('categoryFilter'); // New category filter dropdown
+
+// --- Local Storage Functions ---
 
 /**
- * Displays a random quote from the 'quotes' array in the 'quoteDisplay' div.
- * This function demonstrates advanced DOM manipulation by creating new
- * HTML elements for the quote text and category, and then appending them.
+ * Saves the current 'quotes' array to localStorage.
  */
-function showRandomQuote() {
-    // Clear any existing content in the quote display area
-    quoteDisplay.innerHTML = '';
+function saveQuotes() {
+    localStorage.setItem('quotes', JSON.stringify(quotes));
+}
 
-    // Check if there are any quotes to display
-    if (quotes.length === 0) {
+/**
+ * Loads quotes from localStorage and populates the 'quotes' array.
+ * If no quotes are found in localStorage, it falls back to the initial hardcoded quotes.
+ */
+function loadQuotes() {
+    const storedQuotes = localStorage.getItem('quotes');
+    if (storedQuotes) {
+        try {
+            // Overwrite the 'quotes' array with the stored ones
+            quotes = JSON.parse(storedQuotes);
+        } catch (e) {
+            console.error("Error parsing quotes from localStorage, using default quotes.", e);
+            // Fallback to initial quotes if parsing fails
+            quotes = [
+                { text: "The best way to predict the future is to create it.", category: "Innovation" },
+                { text: "Life is what happens when you're busy making other plans.", category: "Reflection" },
+                { text: "The only limit to our realization of tomorrow will be our doubts of today.", category: "Inspiration" },
+                { text: "Strive not to be a success, but rather to be of value.", category: "Wisdom" },
+                { text: "Do one thing every day that scares you.", category: "Courage" }
+            ];
+        }
+    }
+    // If localStorage is empty, the initial 'quotes' array will be used.
+}
+
+// --- Fetch Quotes from Server (Placeholder) ---
+
+/**
+ * Asynchronously fetches quotes from a hypothetical external server.
+ * Replace 'YOUR_API_ENDPOINT_HERE' with an actual API URL if available.
+ */
+async function fetchQuotesFromServer() {
+    // Placeholder API URL - you'd replace this with a real quote API if available
+    const API_URL = 'https://api.quotable.io/quotes/random?limit=5'; // Example public API
+    // Or, for local testing, you might fetch from a local JSON file:
+    // const API_URL = 'quotes.json';
+
+    try {
+        const response = await fetch(API_URL);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const serverQuotes = await response.json();
+
+        // Ensure quotes have 'text' and 'category' properties.
+        // The quotable.io API has 'content' and 'tags'. We'll map them.
+        const formattedQuotes = serverQuotes.map(q => ({
+            text: q.content,
+            category: q.tags && q.tags.length > 0 ? q.tags[0] : 'General' // Use first tag or 'General'
+        }));
+
+        // Replace existing quotes with fetched ones
+        quotes = formattedQuotes;
+        saveQuotes(); // Save fetched quotes to local storage
+        console.log('Quotes fetched from server and saved:', quotes);
+        populateCategories(); // Re-populate categories with new quotes
+        showRandomQuote(categoryFilter.value); // Display a quote respecting current filter
+    } catch (error) {
+        console.error('Could not fetch quotes from server:', error);
+        // Fallback or inform user if fetch fails
+        quoteDisplay.innerHTML = '<p>Failed to load quotes from server. Displaying local quotes.</p>';
+        // If quotes were cleared before fetch, re-load from local storage if needed
+        loadQuotes();
+        populateCategories();
+        showRandomQuote(categoryFilter.value);
+    }
+}
+
+// --- Display & Filtering Functions ---
+
+/**
+ * Populates the category filter dropdown with unique categories from the current quotes.
+ * Uses Array.prototype.map and Set for efficiency.
+ */
+function populateCategories() {
+    // Extract all categories, then get only unique ones using Set
+    const categories = quotes.map(quote => quote.category);
+    const uniqueCategories = ["all", ...new Set(categories)]; // Add 'all' option
+
+    // Clear existing options and add the 'All Categories' option first
+    categoryFilter.innerHTML = '';
+    uniqueCategories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category === "all" ? "All Categories" : category;
+        categoryFilter.appendChild(option);
+    });
+}
+
+/**
+ * Displays a random quote from the 'quotes' array based on an optional filter category.
+ * This function demonstrates advanced DOM manipulation by creating new HTML elements.
+ * @param {string} filterCategory - The category to filter by ('all' for no filter).
+ */
+function showRandomQuote(filterCategory = 'all') {
+    quoteDisplay.innerHTML = ''; // Clear any existing content
+
+    let filteredQuotes = quotes;
+    if (filterCategory !== 'all' && filterCategory !== '') {
+        // Use filter to get quotes matching the selected category
+        filteredQuotes = quotes.filter(quote => quote.category === filterCategory);
+    }
+
+    if (filteredQuotes.length === 0) {
         const noQuoteMessage = document.createElement('p');
-        noQuoteMessage.textContent = 'No quotes available. Add some!';
-        noQuoteMessage.style.fontStyle = 'italic';
-        noQuoteMessage.style.color = '#8A2BE2'; // Purple for no quotes message
+        noQuoteMessage.textContent = `No quotes available for "${filterCategory}" category.`;
+        // No inline CSS here, assuming styling is in new-style.css
         quoteDisplay.appendChild(noQuoteMessage);
         return;
     }
 
-    // Get a random index
-    const randomIndex = Math.floor(Math.random() * quotes.length);
-    const randomQuote = quotes[randomIndex];
+    const randomIndex = Math.floor(Math.random() * filteredQuotes.length);
+    const randomQuote = filteredQuotes[randomIndex];
 
-    // Create a paragraph element for the quote text
     const quoteTextElement = document.createElement('p');
     quoteTextElement.textContent = `"${randomQuote.text}"`;
-    quoteTextElement.style.fontSize = '1.8em'; // Slightly larger font
-    quoteTextElement.style.fontWeight = 'bold';
-    quoteTextElement.style.marginBottom = '8px'; // Increased margin
-    quoteTextElement.style.color = '#4A0080'; // Darker purple for quote text
+    quoteTextElement.classList.add('quote-text'); // Add a class for CSS styling
 
-    // Create a span element for the quote category
     const quoteCategoryElement = document.createElement('span');
     quoteCategoryElement.textContent = `- ${randomQuote.category}`;
-    quoteCategoryElement.style.fontSize = '1.1em'; // Slightly larger category font
-    quoteCategoryElement.style.color = '#8A2BE2'; // Medium purple for category
+    quoteCategoryElement.classList.add('quote-category'); // Add a class for CSS styling
 
-    // Append the created elements to the quote display div
     quoteDisplay.appendChild(quoteTextElement);
     quoteDisplay.appendChild(quoteCategoryElement);
 }
+
+// --- Add New Quote Form Functions ---
 
 /**
  * Creates and appends a form for adding new quotes to the document body.
@@ -74,132 +171,90 @@ function showRandomQuote() {
  * and updating the display when the 'Add Quote' button is clicked.
  */
 function createAddQuoteForm() {
-    // Create a container div for the form elements
     const formContainer = document.createElement("div");
-    formContainer.style.marginTop = '30px'; // Increased top margin
-    formContainer.style.padding = '20px'; // Increased padding
-    formContainer.style.border = '1px solid #C0C0C0'; // Lighter border
-    formContainer.style.borderRadius = '10px'; // More rounded corners
-    formContainer.style.backgroundColor = '#F5EEFC'; // Very light purple background
-    formContainer.style.display = 'flex';
-    formContainer.style.flexDirection = 'column';
-    formContainer.style.gap = '12px'; // Increased gap
-    formContainer.style.maxWidth = '450px'; // Slightly wider form
-    formContainer.style.margin = '30px auto'; // Center the form, adjust top margin
+    formContainer.classList.add('add-quote-form-container'); // Add class for CSS styling
 
-    // Create the input field for the new quote text
     const quoteInput = document.createElement("input");
-    quoteInput.id = "newQuoteText"; // Assign ID as per instructions
+    quoteInput.id = "newQuoteText";
     quoteInput.type = "text";
-    quoteInput.placeholder = "Enter your amazing new quote..."; // More engaging placeholder
-    quoteInput.style.padding = '10px'; // Increased padding
-    quoteInput.style.borderRadius = '5px';
-    quoteInput.style.border = '1px solid #9370DB'; // Medium purple border
-    quoteInput.style.boxSizing = 'border-box'; // Include padding and border in element's total width and height
+    quoteInput.placeholder = "Enter your amazing new quote...";
+    quoteInput.classList.add('form-input'); // Add class for CSS styling
 
-    // Create the input field for the new quote category
     const categoryInput = document.createElement("input");
-    categoryInput.id = "newQuoteCategory"; // Assign ID as per instructions
+    categoryInput.id = "newQuoteCategory";
     categoryInput.type = "text";
-    categoryInput.placeholder = "What category is it? (e.g., Hope)"; // More engaging placeholder
-    categoryInput.style.padding = '10px';
-    categoryInput.style.borderRadius = '5px';
-    categoryInput.style.border = '1px solid #9370DB'; // Medium purple border
-    categoryInput.style.boxSizing = 'border-box';
+    categoryInput.placeholder = "What category is it? (e.g., Hope)";
+    categoryInput.classList.add('form-input'); // Add class for CSS styling
 
-    // Create the 'Add Quote' button
     const addButton = document.createElement("button");
-    addButton.textContent = "Add My Quote!"; // More enthusiastic button text
-    addButton.style.padding = '12px 20px'; // Increased padding
-    addButton.style.borderRadius = '6px';
-    addButton.style.border = 'none';
-    addButton.style.backgroundColor = '#9932CC'; // Darker purple
-    addButton.style.color = 'white';
-    addButton.style.cursor = 'pointer';
-    addButton.style.fontWeight = 'bold'; // Bold button text
-    addButton.style.transition = 'background-color 0.3s ease, transform 0.1s ease'; // Add transform transition
+    addButton.textContent = "Add My Quote!";
+    addButton.classList.add('add-button'); // Add class for CSS styling
 
-    // Add hover and active effects for the button
-    addButton.onmouseover = () => addButton.style.backgroundColor = '#8A2BE2'; // Medium purple on hover
-    addButton.onmouseout = () => addButton.style.backgroundColor = '#9932CC'; // Back to darker purple
-    addButton.onmousedown = () => addButton.style.transform = 'scale(0.98)'; // Slight shrink on click
-    addButton.onmouseup = () => addButton.style.transform = 'scale(1)'; // Return to normal size
-
-    // Add an event listener to the 'Add Quote' button
     addButton.addEventListener("click", () => {
         const text = quoteInput.value.trim();
         const category = categoryInput.value.trim();
 
-        // Only add the quote if both fields are not empty
         if (text && category) {
             quotes.push({ text, category }); // Add the new quote to the array
+            saveQuotes(); // Save updated quotes to local storage
             quoteInput.value = ""; // Clear the input field
             categoryInput.value = ""; // Clear the category field
-            showRandomQuote(); // Display a new random quote (could be the newly added one)
+            populateCategories(); // Update categories dropdown with new category
+            showRandomQuote(categoryFilter.value); // Display a new random quote respecting filter
         } else {
-            // Simple feedback for the user if fields are empty
             alert("Oops! Please enter both a quote and a category to add it.");
         }
     });
 
-    // Append all created elements to the form container
     formContainer.appendChild(quoteInput);
     formContainer.appendChild(categoryInput);
     formContainer.appendChild(addButton);
 
-    // Append the entire form container to the document body
     document.body.appendChild(formContainer);
+}
+
+// --- Export Quotes Function ---
+
+/**
+ * Exports the current quotes array as a JSON file.
+ * This function is tied to the "Export Quotes" button.
+ */
+function exportQuotes() {
+    const dataStr = JSON.stringify(quotes, null, 2); // Convert quotes array to JSON string, pretty-printed
+    const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+
+    const exportFileName = 'quotes.json';
+
+    const linkElement = document.createElement('a'); // Create a temporary anchor element
+    linkElement.setAttribute('href', dataUri); // Set its href to the data URI
+    linkElement.setAttribute('download', exportFileName); // Set the download filename
+    linkElement.click(); // Programmatically click the link to trigger the download
+    console.log('Quotes exported to quotes.json');
 }
 
 // --- Initial Setup and Event Listeners ---
 
-// 1. Display an initial random quote when the page loads
 window.onload = function() {
-    showRandomQuote();
-    // 2. Create and display the form for adding new quotes
-    createAddQuoteForm();
-}
+    loadQuotes(); // 1. Load quotes from localStorage
+    populateCategories(); // 2. Populate filter dropdown with loaded quotes
+    showRandomQuote(categoryFilter.value); // 3. Display an initial random quote, respecting filter
+    createAddQuoteForm(); // 4. Create and display the add quote form
 
-// Add event listener to the "Show New Quote" button
-newQuoteBtn.addEventListener("click", showRandomQuote);
-
-// --- Local Storage Integration ---
-
-// Function to save quotes to localStorage
-function saveQuotes() {
-    localStorage.setItem('quotes', JSON.stringify(quotes));
-}
-
-// Function to load quotes from localStorage
-function loadQuotes() {
-    const storedQuotes = localStorage.getItem('quotes');
-    if (storedQuotes) {
-        // Parse the JSON string back into a JavaScript array
-        quotes.splice(0, quotes.length, ...JSON.parse(storedQuotes));
+    // Optional: Fetch from server only if local storage is empty initially
+    // This prevents overwriting user's local quotes on every load if they have added some
+    if (quotes.length === 0 || quotes.every(q => q.category === 'General' && q.text === '')) { // Simple check for truly empty or default state
+         fetchQuotesFromServer();
     }
-}
 
-// Modify the addButton click listener to save quotes after adding
-addButton.addEventListener("click", () => {
-    const text = quoteInput.value.trim();
-    const category = categoryInput.value.trim();
 
-    if (text && category) {
-        quotes.push({ text, category }); // Add the new quote to the array
-        saveQuotes(); // Call saveQuotes after adding a new quote
-        quoteInput.value = "";
-        categoryInput.value = "";
-        showRandomQuote();
-    } else {
-        alert("Oops! Please enter both a quote and a category to add it.");
-    }
-});
+    // Event listener for "Show New Quote" button
+    newQuoteBtn.addEventListener("click", () => showRandomQuote(categoryFilter.value));
 
-// Modify window.onload to load quotes when the page starts
-window.onload = function() {
-    loadQuotes(); // Load quotes before displaying the initial random quote
-    showRandomQuote();
-    createAddQuoteForm();
-}
+    // Event listener for "Export Quotes" button
+    exportQuotesBtn.addEventListener('click', exportQuotes); // Use the new const for the button
 
-// ... (rest of your existing script.js code) ...
+    // Event listener for category filter change
+    categoryFilter.addEventListener('change', (event) => {
+        showRandomQuote(event.target.value); // Call showRandomQuote with the selected category
+    });
+};
