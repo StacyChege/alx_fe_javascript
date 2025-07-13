@@ -9,6 +9,8 @@
 <body>
     <h1>Dynamic Quote Generator</h1>
 
+    <div id="syncStatus" style="text-align: center; margin-bottom: 10px; font-weight: bold;"></div>
+
     <div class="filter-container">
         <label for="categoryFilter">Filter by Category:</label>
         <select id="categoryFilter">
@@ -24,6 +26,9 @@
     </div>
 
     <div id="formContainer"></div>
+
+    <input type="file" id="hiddenFileInput" style="display: none;">
+
 
     <script src="script.js"></script>
 </body>
