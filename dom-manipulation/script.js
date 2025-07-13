@@ -1,28 +1,24 @@
 // Initial quote array
 const quotes = [
     {
-        text: "The future belongs to those who believe in the beauty of their dreams.",
+        text: "The best way to predict the future is to create it.",
+        category: "Innovation",
+    },
+    {
+        text: "Life is what happens when you're busy making other plans.",
+        category: "Reflection",
+    },
+    {
+        text: "The only limit to our realization of tomorrow will be our doubts of today.",
         category: "Inspiration",
     },
     {
-        text: "The only way to do great work is to love what you do.",
-        category: "Passion",
+        text: "Strive not to be a success, but rather to be of value.",
+        category: "Wisdom",
     },
     {
-        text: "Success is not final, failure is not fatal: it is the courage to continue that counts.",
-        category: "Resilience",
-    },
-    {
-        text: "Innovation distinguishes between a leader and a follower.",
-        category: "Leadership",
-    },
-    {
-        text: "The mind is everything. What you think you become.",
-        category: "Mindset",
-    },
-    {
-        text: "Life is 10% what happens to us and 90% how we react to it.",
-        category: "Attitude",
+        text: "Do one thing every day that scares you.",
+        category: "Courage",
     }
 ];
 
@@ -43,7 +39,8 @@ function showRandomQuote() {
     if (quotes.length === 0) {
         const noQuoteMessage = document.createElement('p');
         noQuoteMessage.textContent = 'No quotes available. Add some!';
-        // CSS properties removed from here
+        noQuoteMessage.style.fontStyle = 'italic';
+        noQuoteMessage.style.color = '#8A2BE2'; // Purple for no quotes message
         quoteDisplay.appendChild(noQuoteMessage);
         return;
     }
@@ -55,12 +52,16 @@ function showRandomQuote() {
     // Create a paragraph element for the quote text
     const quoteTextElement = document.createElement('p');
     quoteTextElement.textContent = `"${randomQuote.text}"`;
-    // CSS properties removed from here
+    quoteTextElement.style.fontSize = '1.8em'; // Slightly larger font
+    quoteTextElement.style.fontWeight = 'bold';
+    quoteTextElement.style.marginBottom = '8px'; // Increased margin
+    quoteTextElement.style.color = '#4A0080'; // Darker purple for quote text
 
     // Create a span element for the quote category
     const quoteCategoryElement = document.createElement('span');
     quoteCategoryElement.textContent = `- ${randomQuote.category}`;
-    // CSS properties removed from here
+    quoteCategoryElement.style.fontSize = '1.1em'; // Slightly larger category font
+    quoteCategoryElement.style.color = '#8A2BE2'; // Medium purple for category
 
     // Append the created elements to the quote display div
     quoteDisplay.appendChild(quoteTextElement);
@@ -75,29 +76,54 @@ function showRandomQuote() {
 function createAddQuoteForm() {
     // Create a container div for the form elements
     const formContainer = document.createElement("div");
-    // CSS properties removed from here
+    formContainer.style.marginTop = '30px'; // Increased top margin
+    formContainer.style.padding = '20px'; // Increased padding
+    formContainer.style.border = '1px solid #C0C0C0'; // Lighter border
+    formContainer.style.borderRadius = '10px'; // More rounded corners
+    formContainer.style.backgroundColor = '#F5EEFC'; // Very light purple background
+    formContainer.style.display = 'flex';
+    formContainer.style.flexDirection = 'column';
+    formContainer.style.gap = '12px'; // Increased gap
+    formContainer.style.maxWidth = '450px'; // Slightly wider form
+    formContainer.style.margin = '30px auto'; // Center the form, adjust top margin
 
     // Create the input field for the new quote text
     const quoteInput = document.createElement("input");
     quoteInput.id = "newQuoteText"; // Assign ID as per instructions
     quoteInput.type = "text";
-    quoteInput.placeholder = "Enter your amazing new quote...";
-    // CSS properties removed from here
+    quoteInput.placeholder = "Enter your amazing new quote..."; // More engaging placeholder
+    quoteInput.style.padding = '10px'; // Increased padding
+    quoteInput.style.borderRadius = '5px';
+    quoteInput.style.border = '1px solid #9370DB'; // Medium purple border
+    quoteInput.style.boxSizing = 'border-box'; // Include padding and border in element's total width and height
 
     // Create the input field for the new quote category
     const categoryInput = document.createElement("input");
     categoryInput.id = "newQuoteCategory"; // Assign ID as per instructions
     categoryInput.type = "text";
-    categoryInput.placeholder = "What category is it? (e.g., Hope)";
-    // CSS properties removed from here
+    categoryInput.placeholder = "What category is it? (e.g., Hope)"; // More engaging placeholder
+    categoryInput.style.padding = '10px';
+    categoryInput.style.borderRadius = '5px';
+    categoryInput.style.border = '1px solid #9370DB'; // Medium purple border
+    categoryInput.style.boxSizing = 'border-box';
 
     // Create the 'Add Quote' button
     const addButton = document.createElement("button");
-    addButton.textContent = "Add My Quote!";
-    // CSS properties removed from here
+    addButton.textContent = "Add My Quote!"; // More enthusiastic button text
+    addButton.style.padding = '12px 20px'; // Increased padding
+    addButton.style.borderRadius = '6px';
+    addButton.style.border = 'none';
+    addButton.style.backgroundColor = '#9932CC'; // Darker purple
+    addButton.style.color = 'white';
+    addButton.style.cursor = 'pointer';
+    addButton.style.fontWeight = 'bold'; // Bold button text
+    addButton.style.transition = 'background-color 0.3s ease, transform 0.1s ease'; // Add transform transition
 
     // Add hover and active effects for the button
-    // CSS properties removed from here for hover/active
+    addButton.onmouseover = () => addButton.style.backgroundColor = '#8A2BE2'; // Medium purple on hover
+    addButton.onmouseout = () => addButton.style.backgroundColor = '#9932CC'; // Back to darker purple
+    addButton.onmousedown = () => addButton.style.transform = 'scale(0.98)'; // Slight shrink on click
+    addButton.onmouseup = () => addButton.style.transform = 'scale(1)'; // Return to normal size
 
     // Add an event listener to the 'Add Quote' button
     addButton.addEventListener("click", () => {
@@ -133,7 +159,6 @@ window.onload = function() {
     // 2. Create and display the form for adding new quotes
     createAddQuoteForm();
 }
-
 
 // Add event listener to the "Show New Quote" button
 newQuoteBtn.addEventListener("click", showRandomQuote);
