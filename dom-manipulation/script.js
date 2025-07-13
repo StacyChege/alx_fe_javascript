@@ -162,3 +162,44 @@ window.onload = function() {
 
 // Add event listener to the "Show New Quote" button
 newQuoteBtn.addEventListener("click", showRandomQuote);
+
+// --- Local Storage Integration ---
+
+// Function to save quotes to localStorage
+function saveQuotes() {
+    localStorage.setItem('quotes', JSON.stringify(quotes));
+}
+
+// Function to load quotes from localStorage
+function loadQuotes() {
+    const storedQuotes = localStorage.getItem('quotes');
+    if (storedQuotes) {
+        // Parse the JSON string back into a JavaScript array
+        quotes.splice(0, quotes.length, ...JSON.parse(storedQuotes));
+    }
+}
+
+// Modify the addButton click listener to save quotes after adding
+addButton.addEventListener("click", () => {
+    const text = quoteInput.value.trim();
+    const category = categoryInput.value.trim();
+
+    if (text && category) {
+        quotes.push({ text, category }); // Add the new quote to the array
+        saveQuotes(); // Call saveQuotes after adding a new quote
+        quoteInput.value = "";
+        categoryInput.value = "";
+        showRandomQuote();
+    } else {
+        alert("Oops! Please enter both a quote and a category to add it.");
+    }
+});
+
+// Modify window.onload to load quotes when the page starts
+window.onload = function() {
+    loadQuotes(); // Load quotes before displaying the initial random quote
+    showRandomQuote();
+    createAddQuoteForm();
+}
+
+// ... (rest of your existing script.js code) ...
